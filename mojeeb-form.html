@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مُجيب - نموذج تسجيل العملاء</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #6C3CE1;
+  --primary-light: #8B5CF6;
+  --primary-dark: #5228CC;
+  --accent: #F59E0B;
+  --accent-light: #FBBF24;
+  --bg-main: #0F0A1E;
+  --bg-card: #1A1232;
+  --bg-input: #231A42;
+  --bg-input-focus: #2D2252;
+  --text-primary: #F1EEFF;
+  --text-secondary: #A99ED4;
+  --text-muted: #6B5E94;
+  --border: #352A5C;
+  --border-focus: #6C3CE1;
+  --success: #10B981;
+  --error: #EF4444;
+  --radius: 14px;
+  --radius-sm: 10px;
+}
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background Effects */
+.bg-effects {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-effects::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(108,60,225,0.15) 0%, transparent 70%);
+  animation: float 20s ease-in-out infinite;
+}
+.bg-effects::after {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 70%);
+  animation: float 25s ease-in-out infinite reverse;
+}
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(40px, -40px); }
+}
+
+/* Container */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 30px 20px 60px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeDown 0.8s ease-out;
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.logo-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 8px 30px rgba(108,60,225,0.3);
+}
+.logo-text {
+  font-family: 'Cairo', sans-serif;
+  font-size: 36px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--text-primary), var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.header p {
+  color: var(--text-secondary);
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Progress Bar */
+.progress-container {
+  margin-bottom: 36px;
+  animation: fadeDown 0.8s ease-out 0.2s both;
+}
+.progress-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 12px;
+}
+.step-dot {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--bg-input);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 2;
+}
+.step-dot.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: 0 0 20px rgba(108,60,225,0.4);
+}
+.step-dot.completed {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+.step-line {
+  width: 60px;
+  height: 3px;
+  background: var(--border);
+  transition: background 0.4s ease;
+}
+.step-line.completed {
+  background: var(--success);
+}
+.progress-label {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Form Card */
+.form-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px 32px;
+  animation: fadeUp 0.6s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+.form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-title {
+  font-family: 'Cairo', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+.step-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 22px;
+}
+.form-group label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.form-group label .optional {
+  color: var(--text-muted);
+  font-weight: 400;
+  font-size: 13px;
+  margin-right: 6px;
+}
+.form-group label .required {
+  color: var(--accent);
+  margin-right: 4px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+input::placeholder, textarea::placeholder {
+  color: var(--text-muted);
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--border-focus);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 0 3px rgba(108,60,225,0.15);
+}
+textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B5E94' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 14px center;
+}
+select option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
+/* Checkbox Grid */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 500px) {
+  .checkbox-grid { grid-template-columns: 1fr; }
+}
+.checkbox-item {
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+.checkbox-item:hover {
+  border-color: var(--primary-light);
+  background: var(--bg-input-focus);
+}
+.checkbox-item.selected {
+  border-color: var(--primary);
+  background: rgba(108,60,225,0.15);
+}
+.checkbox-item .icon {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.checkbox-item .label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.checkbox-item .checkmark {
+  margin-right: auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.checkbox-item.selected .checkmark {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.checkbox-item.selected .checkmark::after {
+  content: '✓';
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Radio Cards */
+.radio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .radio-grid { grid-template-columns: 1fr 1fr; }
+}
+.radio-card {
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+.radio-card:hover {
+  border-color: var(--primary-light);
+}
+.radio-card.selected {
+  border-color: var(--primary);
+  background: rgba(108,60,225,0.15);
+  box-shadow: 0 0 15px rgba(108,60,225,0.15);
+}
+.radio-card .icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.radio-card .label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Platform chips */
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.chip {
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  user-select: none;
+}
+.chip:hover {
+  border-color: var(--primary-light);
+}
+.chip.selected {
+  border-color: var(--primary);
+  background: rgba(108,60,225,0.15);
+}
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+.btn {
+  padding: 14px 32px;
+  border-radius: var(--radius-sm);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  flex: 1;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(108,60,225,0.3);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(108,60,225,0.4);
+}
+.btn-secondary {
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+}
+.btn-secondary:hover {
+  border-color: var(--primary-light);
+  color: var(--text-primary);
+}
+.btn-submit {
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: white;
+  flex: 1;
+  justify-content: center;
+  font-size: 18px;
+  padding: 16px 32px;
+  box-shadow: 0 4px 20px rgba(16,185,129,0.3);
+}
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(16,185,129,0.4);
+}
+
+/* Two-column row */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 500px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+/* Validation */
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+  border-color: var(--error);
+}
+.error-msg {
+  color: var(--error);
+  font-size: 13px;
+  margin-top: 6px;
+  display: none;
+}
+.form-group.error .error-msg {
+  display: block;
+}
+
+/* Tooltip */
+.hint {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* Success Page */
+.success-page {
+  text-align: center;
+  padding: 60px 20px;
+  animation: fadeUp 0.6s ease-out;
+}
+.success-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--success), #059669);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  margin: 0 auto 24px;
+  box-shadow: 0 8px 40px rgba(16,185,129,0.3);
+  animation: scaleIn 0.5s ease-out 0.3s both;
+}
+@keyframes scaleIn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+.success-page h2 {
+  font-family: 'Cairo', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.success-page p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* Smooth transitions for steps */
+.step-content {
+  animation: fadeUp 0.4s ease-out;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-main); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* Skip link */
+.skip-step {
+  text-align: center;
+  margin-top: 16px;
+}
+.skip-step a {
+  color: var(--text-muted);
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+.skip-step a:hover {
+  color: var(--text-secondary);
+}
+</style>
+</head>
+<body>
+
+<div class="bg-effects"></div>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-text">مُجيب</div>
+      <div class="logo-icon">🤖</div>
+    </div>
+    <p>أنشئ شات بوت ذكي لعملك في دقائق<br>أجب على الأسئلة التالية وسنجهّز بوتك الخاص</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-container">
+    <div class="progress-steps">
+      <div class="step-dot active" data-step="1">1</div>
+      <div class="step-line"></div>
+      <div class="step-dot" data-step="2">2</div>
+      <div class="step-line"></div>
+      <div class="step-dot" data-step="3">3</div>
+      <div class="step-line"></div>
+      <div class="step-dot" data-step="4">4</div>
+      <div class="step-line"></div>
+      <div class="step-dot" data-step="5">5</div>
+    </div>
+    <div class="progress-label">الخطوة <span id="currentStepLabel">1</span> من 5</div>
+  </div>
+
+  <!-- Step 1: Basic Info -->
+  <div class="form-card" id="step1">
+    <div class="step-content">
+      <h2 class="step-title">👋 تعرّف علينا أكثر</h2>
+      <p class="step-subtitle">نحتاج بعض المعلومات الأساسية عنك وعن نشاطك التجاري</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label><span class="required">*</span> اسمك الكريم</label>
+          <input type="text" id="clientName" placeholder="مثال: أحمد محمد">
+          <div class="error-msg">يرجى إدخال اسمك</div>
+        </div>
+        <div class="form-group">
+          <label><span class="required">*</span> اسم النشاط التجاري</label>
+          <input type="text" id="businessName" placeholder="مثال: مطعم الشام">
+          <div class="error-msg">يرجى إدخال اسم النشاط</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label><span class="required">*</span> رقم الواتساب</label>
+          <input type="tel" id="whatsapp" placeholder="مثال: 970599123456+">
+          <div class="error-msg">يرجى إدخال رقم الواتساب</div>
+        </div>
+        <div class="form-group">
+          <label>البريد الإلكتروني <span class="optional">(اختياري)</span></label>
+          <input type="email" id="email" placeholder="example@email.com" dir="ltr">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label><span class="required">*</span> نوع النشاط التجاري</label>
+        <div class="radio-grid">
+          <div class="radio-card" data-value="مطعم/كافيه" onclick="selectRadio(this, 'businessType')">
+            <div class="icon">🍽️</div>
+            <div class="label">مطعم / كافيه</div>
+          </div>
+          <div class="radio-card" data-value="متجر" onclick="selectRadio(this, 'businessType')">
+            <div class="icon">🛍️</div>
+            <div class="label">متجر</div>
+          </div>
+          <div class="radio-card" data-value="صالون/كوافير" onclick="selectRadio(this, 'businessType')">
+            <div class="icon">💇</div>
+            <div class="label">صالون / كوافير</div>
+          </div>
+          <div class="radio-card" data-value="عيادة" onclick="selectRadio(this, 'businessType')">
+            <div class="icon">🏥</div>
+            <div class="label">عيادة</div>
+          </div>
+          <div class="radio-card" data-value="شركة خدمات" onclick="selectRadio(this, 'businessType')">
+            <div class="icon">🏢</div>
+            <div class="label">شركة خدمات</div>
+          </div>
+          <div class="radio-card" data-value="أخرى" onclick="selectRadio(this, 'businessType')">
+            <div class="icon">✨</div>
+            <div class="label">أخرى</div>
+          </div>
+        </div>
+        <div class="error-msg" id="businessTypeError">يرجى اختيار نوع النشاط</div>
+      </div>
+
+      <div class="form-group hidden" id="otherBusinessGroup">
+        <label>حدد نوع نشاطك</label>
+        <input type="text" id="otherBusiness" placeholder="مثال: مركز تدريب، مكتب محاماة...">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="nextStep(1)">التالي ←</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Business Details -->
+  <div class="form-card hidden" id="step2">
+    <div class="step-content">
+      <h2 class="step-title">🏪 تفاصيل عملك</h2>
+      <p class="step-subtitle">ساعدنا نفهم طبيعة عملك أكثر حتى نصمم البوت المناسب</p>
+
+      <div class="form-group">
+        <label>ما هي الخدمات أو المنتجات التي تقدمها؟</label>
+        <textarea id="services" placeholder="مثال: نقدم وجبات عربية وغربية، شاورما، مشاوي، عصائر طبيعية...&#10;أو: قص شعر رجالي، حلاقة ذقن، صبغات..."></textarea>
+        <div class="hint">كلما وصفت أكثر، كان البوت أذكى في الرد على زبائنك</div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>موقعك / عنوانك</label>
+          <input type="text" id="location" placeholder="مثال: نابلس - شارع فيصل">
+        </div>
+        <div class="form-group">
+          <label>عدد الفروع</label>
+          <select id="branches">
+            <option value="">اختر...</option>
+            <option value="1">فرع واحد</option>
+            <option value="2">فرعين</option>
+            <option value="3+">3 فروع أو أكثر</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>أوقات العمل</label>
+          <input type="text" id="workHours" placeholder="مثال: 9 صباحاً - 10 مساءً">
+        </div>
+        <div class="form-group">
+          <label>أيام العطلة</label>
+          <input type="text" id="offDays" placeholder="مثال: الجمعة">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>رابط صفحتك على السوشيال ميديا <span class="optional">(اختياري)</span></label>
+        <input type="url" id="socialLink" placeholder="رابط فيسبوك أو انستغرام..." dir="ltr">
+      </div>
+
+      <div class="form-group">
+        <label>هل عندك موقع إلكتروني؟ <span class="optional">(اختياري)</span></label>
+        <input type="url" id="website" placeholder="https://example.com" dir="ltr">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="prevStep(2)">→ السابق</button>
+        <button class="btn btn-primary" onclick="nextStep(2)">التالي ←</button>
+      </div>
+      <div class="skip-step"><a onclick="skipStep(2)">تخطّي هذه الخطوة ←</a></div>
+    </div>
+  </div>
+
+  <!-- Step 3: Bot Requirements -->
+  <div class="form-card hidden" id="step3">
+    <div class="step-content">
+      <h2 class="step-title">🤖 ماذا تريد من البوت؟</h2>
+      <p class="step-subtitle">اختر المهام التي تريد أن يقوم بها البوت الخاص بك</p>
+
+      <div class="form-group">
+        <label>مهام البوت المطلوبة <span class="hint" style="display:inline">(اختر ما يناسبك)</span></label>
+        <div class="checkbox-grid">
+          <div class="checkbox-item" onclick="toggleCheck(this)">
+            <span class="icon">💬</span>
+            <span class="label">الرد على استفسارات الزبائن</span>
+            <span class="checkmark"></span>
+          </div>
+          <div class="checkbox-item" onclick="toggleCheck(this)">
+            <span class="icon">📅</span>
+            <span class="label">إدارة الحجوزات والمواعيد</span>
+            <span class="checkmark"></span>
+          </div>
+          <div class="checkbox-item" onclick="toggleCheck(this)">
+            <span class="icon">🛒</span>
+            <span class="label">عرض المنتجات والأسعار</span>
+            <span class="checkmark"></span>
+          </div>
+          <div class="checkbox-item" onclick="toggleCheck(this)">
+            <span class="icon">🎯</span>
+            <span class="label">إقناع الزبائن وزيادة المبيعات</span>
+            <span class="checkmark"></span>
+          </div>
+          <div class="checkbox-item" onclick="toggleCheck(this)">
+            <span class="icon">📢</span>
+            <span class="label">إرسال العروض والتنبيهات</span>
+            <span class="checkmark"></span>
+          </div>
+          <div class="checkbox-item" onclick="toggleCheck(this)">
+            <span class="icon">⭐</span>
+            <span class="label">استقبال التقييمات والشكاوى</span>
+            <span class="checkmark"></span>
+          </div>
+          <div class="checkbox-item" onclick="toggleCheck(this)">
+            <span class="icon">🚚</span>
+            <span class="label">تتبع الطلبات والتوصيل</span>
+            <span class="checkmark"></span>
+          </div>
+          <div class="checkbox-item" onclick="toggleCheck(this)">
+            <span class="icon">🔄</span>
+            <span class="label">تحويل لموظف بشري عند الحاجة</span>
+            <span class="checkmark"></span>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="prevStep(3)">→ السابق</button>
+        <button class="btn btn-primary" onclick="nextStep(3)">التالي ←</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4: Content & Operations -->
+  <div class="form-card hidden" id="step4">
+    <div class="step-content">
+      <h2 class="step-title">📋 المحتوى والعمليات</h2>
+      <p class="step-subtitle">هذه المعلومات تساعد البوت يكون أكثر دقة في الردود</p>
+
+      <div class="form-group">
+        <label>الأسئلة الأكثر شيوعاً من زبائنك <span class="optional">(اختياري)</span></label>
+        <textarea id="faq" placeholder="مثال:&#10;- كم سعر الشاورما؟&#10;- هل يوجد توصيل؟&#10;- ما هي أوقات العمل؟&#10;- هل يمكنني الحجز أونلاين؟"></textarea>
+        <div class="hint">اكتب الأسئلة اللي زبائنك يسألوها دايماً - البوت راح يجاوب عليها تلقائياً</div>
+      </div>
+
+
+
+      <div class="form-group">
+        <label>هل عندك نظام حجوزات حالي؟</label>
+        <select id="currentSystem">
+          <option value="">اختر...</option>
+          <option value="لا يوجد">لا، أريد البوت يدير الحجوزات</option>
+          <option value="نظام خاص">نعم، عندي نظام خاص</option>
+          <option value="لا أحتاج حجوزات">لا أحتاج حجوزات</option>
+        </select>
+      </div>
+
+
+
+      <div class="form-group">
+        <label>هل تريد ربط البوت بأنظمة أخرى؟ <span class="optional">(اختياري)</span></label>
+        <input type="text" id="integrations" placeholder="مثال: Google Sheets، نظام المحاسبة، CRM...">
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="prevStep(4)">→ السابق</button>
+        <button class="btn btn-primary" onclick="nextStep(4)">التالي ←</button>
+      </div>
+      <div class="skip-step"><a onclick="skipStep(4)">تخطّي هذه الخطوة ←</a></div>
+    </div>
+  </div>
+
+  <!-- Step 5: Preferences -->
+  <div class="form-card hidden" id="step5">
+    <div class="step-content">
+      <h2 class="step-title">✨ اللمسات الأخيرة</h2>
+      <p class="step-subtitle">خصّص شخصية البوت وأسلوبه في التعامل مع زبائنك</p>
+
+      <div class="form-group">
+        <label>أسلوب الردود المطلوب</label>
+        <div class="radio-grid">
+          <div class="radio-card" data-value="ودي وقريب" onclick="selectRadio(this, 'toneStyle')">
+            <div class="icon">😊</div>
+            <div class="label">ودّي وقريب</div>
+          </div>
+          <div class="radio-card" data-value="رسمي ومهني" onclick="selectRadio(this, 'toneStyle')">
+            <div class="icon">👔</div>
+            <div class="label">رسمي ومهني</div>
+          </div>
+          <div class="radio-card" data-value="مزيج بينهم" onclick="selectRadio(this, 'toneStyle')">
+            <div class="icon">⚖️</div>
+            <div class="label">مزيج بينهم</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>اسم البوت <span class="optional">(اختياري)</span></label>
+        <input type="text" id="botName" placeholder="مثال: سارة، مساعد المطعم، بوت الحجوزات...">
+        <div class="hint">اختر اسم يناسب طبيعة عملك - أو اتركه وسنختار لك اسم مناسب</div>
+      </div>
+
+      <div class="form-group">
+        <label>رسالة ترحيبية مخصصة <span class="optional">(اختياري)</span></label>
+        <textarea id="welcomeMsg" placeholder="مثال: أهلاً وسهلاً! أنا مساعدك الذكي في مطعم الشام 🍽️ كيف أقدر أساعدك اليوم؟"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>ملاحظات أو طلبات إضافية <span class="optional">(اختياري)</span></label>
+        <textarea id="notes" placeholder="أي شيء تحب تضيفه أو تنبّهنا عليه..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>كيف عرفت عن مُجيب؟ <span class="optional">(اختياري)</span></label>
+        <select id="hearAboutUs">
+          <option value="">اختر...</option>
+          <option value="سوشيال ميديا">سوشيال ميديا</option>
+          <option value="صديق/معرفة">صديق أو معرفة</option>
+          <option value="بحث جوجل">بحث جوجل</option>
+          <option value="إعلان">إعلان</option>
+          <option value="أخرى">أخرى</option>
+        </select>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="prevStep(5)">→ السابق</button>
+        <button class="btn btn-submit" onclick="submitForm()">🚀 إرسال وإنشاء البوت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Page -->
+  <div class="form-card hidden" id="successPage">
+    <div class="success-page">
+      <div class="success-icon">✓</div>
+      <h2>تم الإرسال بنجاح! 🎉</h2>
+      <p>شكراً لك! تم استلام بياناتك وسيتواصل معك فريقنا خلال 24 ساعة لإعداد بوتك الخاص على مُجيب.</p>
+      <p style="margin-top: 16px; color: var(--accent);">سيصلك رابط لوحة التحكم لإدارة البوت وتعديل إعداداته</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// State
+const formData = {};
+const radioSelections = {};
+let currentStep = 1;
+
+// Radio selection
+function selectRadio(el, group) {
+  const parent = el.parentElement;
+  parent.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  radioSelections[group] = el.dataset.value;
+
+  // Show "other" field for business type
+  if (group === 'businessType') {
+    const otherGroup = document.getElementById('otherBusinessGroup');
+    if (el.dataset.value === 'أخرى') {
+      otherGroup.classList.remove('hidden');
+    } else {
+      otherGroup.classList.add('hidden');
+    }
+  }
+}
+
+// Checkbox toggle
+function toggleCheck(el) {
+  el.classList.toggle('selected');
+}
+
+// Chip toggle
+function toggleChip(el) {
+  el.classList.toggle('selected');
+}
+
+// Validation
+function validateStep(step) {
+  let valid = true;
+
+  if (step === 1) {
+    const fields = [
+      { id: 'clientName', required: true },
+      { id: 'businessName', required: true },
+      { id: 'whatsapp', required: true },
+    ];
+
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      const group = el.closest('.form-group');
+      if (f.required && !el.value.trim()) {
+        group.classList.add('error');
+        valid = false;
+      } else {
+        group.classList.remove('error');
+      }
+    });
+
+    // Business type
+    if (!radioSelections['businessType']) {
+      document.getElementById('businessTypeError').style.display = 'block';
+      valid = false;
+    } else {
+      document.getElementById('businessTypeError').style.display = 'none';
+    }
+  }
+
+  return valid;
+}
+
+// Navigation
+function nextStep(from) {
+  if (!validateStep(from)) return;
+  showStep(from + 1);
+}
+
+function prevStep(from) {
+  showStep(from - 1);
+}
+
+function skipStep(from) {
+  showStep(from + 1);
+}
+
+function showStep(step) {
+  // Hide all steps
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById('step' + i).classList.add('hidden');
+  }
+  document.getElementById('step' + step).classList.remove('hidden');
+  currentStep = step;
+
+  // Update progress
+  document.getElementById('currentStepLabel').textContent = step;
+  document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+    const s = idx + 1;
+    dot.classList.remove('active', 'completed');
+    if (s === step) dot.classList.add('active');
+    else if (s < step) dot.classList.add('completed');
+  });
+  document.querySelectorAll('.step-line').forEach((line, idx) => {
+    if (idx + 1 < step) line.classList.add('completed');
+    else line.classList.remove('completed');
+  });
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Submit
+function submitForm() {
+  // Collect all data
+  const data = {
+    // Step 1
+    clientName: document.getElementById('clientName').value,
+    businessName: document.getElementById('businessName').value,
+    whatsapp: document.getElementById('whatsapp').value,
+    email: document.getElementById('email').value,
+    businessType: radioSelections['businessType'] || '',
+    otherBusiness: document.getElementById('otherBusiness').value,
+
+    // Step 2
+    services: document.getElementById('services').value,
+    location: document.getElementById('location').value,
+    branches: document.getElementById('branches').value,
+    workHours: document.getElementById('workHours').value,
+    offDays: document.getElementById('offDays').value,
+    socialLink: document.getElementById('socialLink').value,
+    website: document.getElementById('website').value,
+
+    // Step 3
+    botTasks: [...document.querySelectorAll('#step3 .checkbox-item.selected')].map(el => el.querySelector('.label').textContent),
+
+    // Step 4
+    faq: document.getElementById('faq').value,
+    currentSystem: document.getElementById('currentSystem').value,
+    integrations: document.getElementById('integrations').value,
+
+    // Step 5
+    toneStyle: radioSelections['toneStyle'] || '',
+    botName: document.getElementById('botName').value,
+    welcomeMsg: document.getElementById('welcomeMsg').value,
+    notes: document.getElementById('notes').value,
+    hearAboutUs: document.getElementById('hearAboutUs').value,
+  };
+
+  console.log('Form Data:', JSON.stringify(data, null, 2));
+
+  // Show success
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById('step' + i).classList.add('hidden');
+  }
+  document.querySelector('.progress-container').classList.add('hidden');
+  document.getElementById('successPage').classList.remove('hidden');
+
+  // Update all dots to completed
+  document.querySelectorAll('.step-dot').forEach(dot => {
+    dot.classList.remove('active');
+    dot.classList.add('completed');
+  });
+  document.querySelectorAll('.step-line').forEach(line => line.classList.add('completed'));
+}
+</script>
+
+</body>
+</html>
